@@ -91,3 +91,7 @@ button:hover {
 .pokemon-container li {
     font-size: 18px;
 }
+
+.error {
+    margin-top: 12px;
+}

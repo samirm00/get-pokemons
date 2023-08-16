@@ -3,8 +3,11 @@ import getPokemonById from '../../apis/getPokemonById.js';
 import createPokemon from '../components/createPokemon.js';
 
 const getPokemonHandler = async () => {
+    // empty the root
     dom.root.innerHTML = '';
     const value = dom.input.value;
+
+    // if no value
     if (!value) {
         dom.error.innerText = 'Please enter pokemon ids separated by "," ';
         dom.error.classList.add('error');
