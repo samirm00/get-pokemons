@@ -4,7 +4,7 @@ const createPokemon = (pokemonData) => {
     // container
     const container = document.createElement('div');
     container.className = 'pokemon-container';
-    container.id = 'container';
+    container.id = pokemonData.id;
 
     // Create and append the name
     const name = document.createElement('h2');

@@ -1,51 +1,46 @@
 import dom from '../dom.js';
-import pokemonData from '../data.js';
 import getPokemonById from '../../apis/getPokemonById.js';
 import createPokemon from '../components/createPokemon.js';
-import updatePokemon from '../components/updatePokemon.js';
 
 const getPokemonHandler = async () => {
-    const pokemonExist = document.getElementById('container');
-
-    // if pokemonData.id is the same return
-    const id = Number(dom.input.value);
-    if (pokemonData.id === id) {
+    dom.root.innerHTML = '';
+    const value = dom.input.value;
+    if (!value) {
+        dom.error.innerText = 'Please enter pokemon ids separated by "," ';
+        dom.error.classList.add('error');
         return;
     }
 
-    if (Number.isNaN(id) || id <= 0) {
-        pokemonData.id = null;
-        dom.error.innerText = 'Please enter a valid Pokémon ID.';
-        dom.root.append(dom.error);
-        if (pokemonExist) {
-            pokemonExist.remove();
+    // check valid ids
+    const validIds = [];
+    const values = value.split(',');
+    values.forEach((val) => {
+        const valNum = Number(val);
+        if (!Number.isNaN(valNum) && valNum > 0 && valNum < 1281) {
+            validIds.push(valNum);
         }
+    });
+
+    // check if there are valid id(s)
+    if (validIds.length === 0) {
+        dom.error.innerText = 'your ids are not valid';
+        dom.error.classList.add('error');
         return;
     }
 
-    const data = await getPokemonById(id);
-
-    if (!data) {
-        dom.error.innerText =
-            'An error occurred, or the Pokémon was not found.';
-        dom.root.append(dom.error);
-        if (pokemonExist) {
-            pokemonExist.remove();
-        }
-        return;
+    // remove error if exits
+    if (dom.error.innerText !== '') {
+        dom.error.innerText = '';
+        dom.error.classList.remove('error');
     }
 
-    // remove error
-    dom.error.remove();
-    if (!pokemonExist) {
-        const pokemonDom = createPokemon(data);
+    const pokemonPromises = validIds.map((id) => getPokemonById(id));
+    const pokemons = await Promise.all(pokemonPromises);
+
+    pokemons.forEach((pokemonData) => {
+        const pokemonDom = createPokemon(pokemonData);
         dom.root.append(pokemonDom);
-    } else {
-        updatePokemon(pokemonExist, data);
-    }
-
-    // add id to data
-    pokemonData.id = id;
+    });
 };
 
 export default getPokemonHandler;

@@ -1,5 +1,3 @@
-const pokemonData = {
-    id: null,
-};
+const pokemonData = {};
 
 export default pokemonData;

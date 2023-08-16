@@ -1,6 +1,6 @@
-# Get Pokemon
+# Get Pokemons
 
-> A simple website allows the user to get a pokemon by id.
+> A simple website allows the user to get pokemon(s) by id.
 
 ## Table of contents
 
